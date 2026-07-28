@@ -1,13 +1,14 @@
-import * as PIXI from 'pixi.js';
-import { Player } from './Engine/Player';
-import Common from './util/Common';
-import { ICoordinates } from './util/Geometry';
-import Objects, { IObject } from './Engine/Objects';
-import SceneryEngine from './Engine/SceneryEngine';
-import Keypress from './Engine/Keypress';
-import spriteData from '../data/sprites.json';
+import * as PIXI from "pixi.js";
 
-export default class Game{
+import spriteData from "../data/sprites.json";
+import Keypress from "./Engine/Keypress";
+import Objects, { IObject } from "./Engine/Objects";
+import { Player } from "./Engine/Player";
+import SceneryEngine from "./Engine/SceneryEngine";
+import Common from "./util/Common";
+import { ICoordinates } from "./util/Geometry";
+
+export default class Game {
 	static readonly FPS: number = 60;
 	private static GAME: Game;
 	private static RESOURCE_SCALE: IScaleMap = {};
@@ -22,57 +23,59 @@ export default class Game{
 	private last_move: number = 0;
 	private last_move_x: boolean = false;
 
-	private constructor(){
-		this.app = new PIXI.Application({width: 800, height: 600});
+	private constructor() {
+		this.app = new PIXI.Application({ width: 800, height: 600 });
 		this.loader = new PIXI.Loader();
-		this.player = new Player('Aldo', 66, 268);
+		this.player = new Player("Aldo", 66, 268);
 		this.overWorld = new PIXI.Container();
 		this.overWorldSprite = new PIXI.Sprite();
 		document.body.appendChild(this.app.view);
 	}
 
-	static getGame(): Game{
-		if(Game.GAME == null){
+	static getGame(): Game {
+		if (Game.GAME == null) {
 			Game.GAME = new Game();
 		}
 
 		return Game.GAME;
 	}
 
-	getScreenPosition(): ICoordinates{
+	getScreenPosition(): ICoordinates {
 		return {
 			x: this.overWorldSprite.x,
-			y: this.overWorldSprite.y
+			y: this.overWorldSprite.y,
 		};
 	}
 
-	loadGame(){
-		if(this.loaded || this.loading){
+	loadGame() {
+		if (this.loaded || this.loading) {
 			return;
 		}
 
-		document.getElementById('loading')?.remove();
+		document.getElementById("loading")?.remove();
 		this.loading = true;
 		Objects.loadObjects();
-		for(const sprite of spriteData){
+		for (const sprite of spriteData) {
 			this.loader.add(sprite.name, sprite.path);
 			Game.RESOURCE_SCALE[sprite.name] = sprite.scale;
 		}
-		this.loader.on('progress', (loader: PIXI.Loader, resource: PIXI.LoaderResource) => this.loadProgressHandler(loader, resource))
-					.load(() => this.gameLoaded());
+
+		this.loader
+			.on("progress", (loader: PIXI.Loader, resource: PIXI.LoaderResource) => this.loadProgressHandler(loader, resource))
+			.load(() => this.gameLoaded());
 	}
 
-	private loadProgressHandler(loader: PIXI.Loader, resource: PIXI.LoaderResource){
-		console.log(Math.round(loader.progress) + '%');
+	private loadProgressHandler(loader: PIXI.Loader, resource: PIXI.LoaderResource) {
+		console.log(Math.round(loader.progress) + "%");
 	}
 
-	private gameLoaded(){
+	private gameLoaded() {
 		this.overWorld.sortableChildren = true;
 		this.app.stage.addChild(this.overWorld);
 		const overworldScale: IScale = Game.RESOURCE_SCALE.overworld;
 		this.overWorldSprite = new PIXI.Sprite(this.loader.resources.overworld.texture);
-		this.overWorldSprite.x = 400 + (this.player.getX() * -48);
-		this.overWorldSprite.y = 349 + (this.player.getY() * -48);
+		this.overWorldSprite.x = 400 + this.player.getX() * -48;
+		this.overWorldSprite.y = 349 + this.player.getY() * -48;
 		this.overWorldSprite.zIndex = 0;
 		this.overWorldSprite.scale.set(overworldScale.x, overworldScale.y);
 
@@ -85,20 +88,20 @@ export default class Game{
 
 		this.loaded = true;
 		this.loading = false;
-		console.log('GAME LOADED.');
+		console.log("GAME LOADED.");
 		this.userInput();
 		this.app.ticker.add((delta: number) => this.process(delta));
 	}
 
-	private userInput(){
-		if(!this.loaded){
+	private userInput() {
+		if (!this.loaded) {
 			return;
 		}
 
-		const left: Keypress = new Keypress('ArrowLeft', this.player);
-		const right: Keypress = new Keypress('ArrowRight', this.player);
-		const down: Keypress = new Keypress('ArrowDown', this.player);
-		const up: Keypress = new Keypress('ArrowUp', this.player);
+		const left: Keypress = new Keypress("ArrowLeft", this.player);
+		const right: Keypress = new Keypress("ArrowRight", this.player);
+		const down: Keypress = new Keypress("ArrowDown", this.player);
+		const up: Keypress = new Keypress("ArrowUp", this.player);
 
 		left.press = (player: Player) => {
 			player.vx = -25;
@@ -106,7 +109,7 @@ export default class Game{
 		};
 
 		left.release = (player: Player) => {
-			if(!right.isDownPressed()){
+			if (!right.isDownPressed()) {
 				player.vx = 0;
 			}
 		};
@@ -117,7 +120,7 @@ export default class Game{
 		};
 
 		right.release = (player: Player) => {
-			if(!left.isDownPressed()){
+			if (!left.isDownPressed()) {
 				player.vx = 0;
 			}
 		};
@@ -128,7 +131,7 @@ export default class Game{
 		};
 
 		up.release = (player: Player) => {
-			if(!down.isDownPressed()){
+			if (!down.isDownPressed()) {
 				player.vy = 0;
 			}
 		};
@@ -139,87 +142,89 @@ export default class Game{
 		};
 
 		down.release = (player: Player) => {
-			if(!up.isDownPressed()){
+			if (!up.isDownPressed()) {
 				player.vy = 0;
 			}
 		};
 
-		const aKey: Keypress = new Keypress('a', this.player);
+		const aKey: Keypress = new Keypress("a", this.player);
 		aKey.release = (player: Player) => {
 			player.handleAPress();
 		};
 
-		const bKey: Keypress = new Keypress('s', this.player);
+		const bKey: Keypress = new Keypress("s", this.player);
 		bKey.release = (player: Player) => {
 			player.handleBPress();
 		};
 
-		const enter: Keypress = new Keypress('Enter', this.player);
+		const enter: Keypress = new Keypress("Enter", this.player);
 		enter.release = (player: Player) => {
 			player.handleEnterPress();
 		};
 	}
 
-	process(delta: number){
+	process(delta: number) {
 		this.player.handleMove();
 		SceneryEngine.getSceneryEngine().process();
 	}
 
-	move(amount: number, x: boolean | null = true){
-		if(x == null){
+	move(amount: number, x: boolean | null = true) {
+		if (x == null) {
 			x = this.last_move_x;
-		}else{
+		} else {
 			this.last_move_x = x;
 		}
-		if(amount !== 0){
+
+		if (amount !== 0) {
 			this.last_move = amount;
-		}else{
+		} else {
 			amount = this.last_move;
 		}
 
 		const nextCoords: ICoordinates = {
-			x: this.player.getX() + ((amount > 0 ? 1 : -1) * (x ? 1 : 0)),
-			y: this.player.getY() + ((amount > 0 ? 1 : -1) * (x ? 0 : 1))
+			x: this.player.getX() + (amount > 0 ? 1 : -1) * (x ? 1 : 0),
+			y: this.player.getY() + (amount > 0 ? 1 : -1) * (x ? 0 : 1),
 		};
 
-		if(!Objects.canMove(this.player.getCoords(), nextCoords)){
+		if (!Objects.canMove(this.player.getCoords(), nextCoords)) {
 			this.player.doneMoving();
 			return;
 		}
 
 		this.moveObjects(amount, x);
-		const correctOverworld: ICoordinates = { x: 400 + (nextCoords.x * -48), y: 349 + (nextCoords.y * -48) };
-		if(correctOverworld.x === this.overWorldSprite.x && correctOverworld.y === this.overWorldSprite.y){
+		const correctOverworld: ICoordinates = { x: 400 + nextCoords.x * -48, y: 349 + nextCoords.y * -48 };
+		if (correctOverworld.x === this.overWorldSprite.x && correctOverworld.y === this.overWorldSprite.y) {
 			this.player.doneMoving(nextCoords);
 			const tile: IObject | null = Objects.checkTileObject(nextCoords);
-			if(tile != null){
-				if(tile.hasEncounter){
+			if (tile != null) {
+				if (tile.hasEncounter) {
 					this.handleEncounter();
 				}
 			}
 		}
 	}
 
-	addSprite(sprite: PIXI.DisplayObject){
+	addSprite(sprite: PIXI.DisplayObject) {
 		this.overWorld.addChild(sprite);
 	}
 
-	removeSprite(sprite: PIXI.DisplayObject){
+	removeSprite(sprite: PIXI.DisplayObject) {
 		this.overWorld.removeChild(sprite);
 	}
 
-	moveObjects(amount: number, x: boolean = true){
+	moveObjects(amount: number, x: boolean = true) {
 		amount *= 100;
-		for(const child of this.overWorld.children){
-			if(child.name === 'PLAYER' || !child.visible){
+		for (const child of this.overWorld.children) {
+			if (child.name === "PLAYER" || !child.visible) {
 				continue;
 			}
 
-			if(child instanceof SkipSprite){
+			if (child instanceof SkipSprite) {
 				const sChild: SkipSprite = child as SkipSprite;
 				sChild.skipMove = false;
 				continue;
 			}
+
 			child.x *= 100;
 			child.y *= 100;
 			child.x -= amount * 48 * (x ? 1 : 0);
@@ -229,60 +234,61 @@ export default class Game{
 		}
 	}
 
-	getPlayerCoords(): ICoordinates{
+	getPlayerCoords(): ICoordinates {
 		return this.player.getCoords();
 	}
 
-	getPlayerIsMoving(): boolean{
+	getPlayerIsMoving(): boolean {
 		return this.player.isPlayerMoving();
 	}
 
-	getPlayerMovingTo(): ICoordinates | null{
+	getPlayerMovingTo(): ICoordinates | null {
 		return this.player.getMovingTo();
 	}
 
-	isPlayerMoving(): boolean{
+	isPlayerMoving(): boolean {
 		return this.player.isPlayerMoving();
 	}
 
-	isPlayerSurfing(): boolean{
+	isPlayerSurfing(): boolean {
 		return this.player.isPlayerSurfing();
 	}
 
-	handleEncounter(){
-		if(Common.random(1, 6) === 1){
-			console.log('ENCOUNTER!!!');
+	handleEncounter() {
+		if (Common.random(1, 6) === 1) {
+			console.log("ENCOUNTER!!!");
 		}
 	}
 
-	getResourceScale(name: string): IScale{
-		if(!(name in Game.RESOURCE_SCALE)){
-			return {x: 3, y: 3};
+	getResourceScale(name: string): IScale {
+		if (!(name in Game.RESOURCE_SCALE)) {
+			return { x: 3, y: 3 };
 		}
 
 		return Game.RESOURCE_SCALE[name];
 	}
 
-	getResource(name: string): PIXI.LoaderResource | null{
-		if(!(name in this.loader.resources)){
+	getResource(name: string): PIXI.LoaderResource | null {
+		if (!(name in this.loader.resources)) {
 			return null;
 		}
+
 		return this.loader.resources[name];
 	}
 }
 
-export class SkipSprite extends PIXI.Sprite{
+export class SkipSprite extends PIXI.Sprite {
 	public skipMove: boolean = false;
-	constructor(texture?: PIXI.Texture){
+	constructor(texture?: PIXI.Texture) {
 		super(texture);
 	}
 }
 
-interface IScaleMap{
+interface IScaleMap {
 	[index: string]: IScale;
 }
 
-export interface IScale{
+export interface IScale {
 	x: number;
 	y: number;
 }

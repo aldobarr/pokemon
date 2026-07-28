@@ -2,26 +2,35 @@
   "name": "pokemon",
   "version": "1.0.0",
   "description": "Pokemon Game",
-  "main": "dist/src/main.js",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "prebuild": "rimraf dist/* && tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "tsc",
-    "postbuild": "npx browserify dist/src/main.js > dist/bundle.js",
-    "prestart": "npm run build",
-    "start": "node .",
-    "ministart": "node .",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "uglify": "npx uglifyjs --compress --mangle --output dist/bundle.js -- dist/bundle.js"
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "lint": "oxlint src",
+    "lint:fix": "oxlint --fix src",
+    "format": "oxfmt src",
+    "format:check": "oxfmt --check src",
+    "fix": "npm run lint:fix && npm run format",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run lint && npm run format:check && npm run typecheck",
+    "prebuild": "npm run clean && npm run fix",
+    "build": "esbuild ./src/main.ts --bundle --format=iife --target=es2022 --sourcemap --outfile=dist/bundle.js",
+    "start": "esbuild ./src/main.ts --bundle --format=iife --target=es2022 --sourcemap --outfile=dist/bundle.js --servedir=. --serve=8000",
+    "watch": "esbuild ./src/main.ts --bundle --format=iife --target=es2022 --sourcemap --outfile=dist/bundle.js --watch"
   },
   "author": "",
-  "license": "ISC",
+  "license": "AGPL-3.0-only",
   "dependencies": {
-    "browserify": "^16.5.0",
-    "pixi.js": "^5.2.1",
-    "rimraf": "^3.0.1",
-    "spatial-hashmap": "^1.0.2",
-    "tslint": "^5.20.1",
-    "typescript": "^3.7.5",
-    "uglify-es": "^3.3.9"
+    "pixi.js": "^5.3.12",
+    "spatial-hashmap": "^1.0.6"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "oxfmt": "^0.61.0",
+    "oxlint": "^1.76.0",
+    "typescript": "^6.0.3"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true
   }
 }

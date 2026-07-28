@@ -1,10 +1,10 @@
-import * as PIXI from 'pixi.js';
+import * as PIXI from "pixi.js";
 
-export default class PokeText extends PIXI.Text{
-	constructor(text: string){
+export default class PokeText extends PIXI.Text {
+	constructor(text: string) {
 		super(text, {
-			fontFamily: 'pokefont',
-			fontSize: 62
+			fontFamily: "pokefont",
+			fontSize: 62,
 		});
 	}
 }

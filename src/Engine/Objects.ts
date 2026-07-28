@@ -1,47 +1,59 @@
-import objectData from '../../data/objects.json';
-import SpatialManager from 'spatial-hashmap';
-import { ICoordinates } from '../util/Geometry';
-import Game from '../Game.js';
+import SpatialManager from "spatial-hashmap";
 
-export default class Objects{
+import objectData from "../../data/objects.json";
+import Game from "../Game.js";
+import { ICoordinates } from "../util/Geometry";
+
+export default class Objects {
 	private static MAP = new SpatialManager(407, 399, 25);
-	static canMove(current: ICoordinates, next: ICoordinates): boolean{
+	static canMove(current: ICoordinates, next: ICoordinates): boolean {
 		const objects: Set<unknown> = Objects.getNearbyObjects(current);
 
-		for(const val of objects){
+		for (const val of objects) {
 			const object: IObject = val as IObject;
-			if((object.geometry.aabb.min.x <= next.x && object.geometry.aabb.max.x >= next.x) &&
-				(object.geometry.aabb.min.y <= next.y && object.geometry.aabb.max.y >= next.y) &&
-				(!object.canMove || (object.isWater && !Game.getGame().isPlayerSurfing()))){
+			if (
+				object.geometry.aabb.min.x <= next.x &&
+				object.geometry.aabb.max.x >= next.x &&
+				object.geometry.aabb.min.y <= next.y &&
+				object.geometry.aabb.max.y >= next.y &&
+				(!object.canMove || (object.isWater && !Game.getGame().isPlayerSurfing()))
+			) {
 				return false;
 			}
 		}
+
 		return true;
 	}
 
-	static hasGrass(coords: ICoordinates): boolean{
+	static hasGrass(coords: ICoordinates): boolean {
 		const objects: Set<unknown> = Objects.getNearbyObjects(coords);
 
-		for(const val of objects){
+		for (const val of objects) {
 			const object: IObject = val as IObject;
-			if((object.geometry.aabb.min.x <= coords.x && object.geometry.aabb.max.x >= coords.x) &&
-				(object.geometry.aabb.min.y <= coords.y && object.geometry.aabb.max.y >= coords.y) && object.isGrass){
+			if (
+				object.geometry.aabb.min.x <= coords.x &&
+				object.geometry.aabb.max.x >= coords.x &&
+				object.geometry.aabb.min.y <= coords.y &&
+				object.geometry.aabb.max.y >= coords.y &&
+				object.isGrass
+			) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
-	static checkForMessage(pos: ICoordinates): string[] | null{
+	static checkForMessage(pos: ICoordinates): string[] | null {
 		const objects: Set<unknown> = Objects.getNearbyObjects(pos);
 
-		for(const val of objects){
+		for (const val of objects) {
 			const object: IObject = val as IObject;
-			if(object.msgLocation == null || object.msg == null){
+			if (object.msgLocation == null || object.msg == null) {
 				continue;
 			}
 
-			if(object.msgLocation.x === pos.x && object.msgLocation.y === pos.y){
+			if (object.msgLocation.x === pos.x && object.msgLocation.y === pos.y) {
 				return object.msg;
 			}
 		}
@@ -49,20 +61,24 @@ export default class Objects{
 		return null;
 	}
 
-	static loadObjects(){
+	static loadObjects() {
 		objectData.forEach((val: IObject) => {
 			Objects.MAP.registerObject(val, val.geometry);
 		});
 	}
 
-	static checkTileObject(coords: ICoordinates): IObject | null{
+	static checkTileObject(coords: ICoordinates): IObject | null {
 		const objects: Set<unknown> = Objects.getNearbyObjects(coords);
 
-		for(const val of objects){
+		for (const val of objects) {
 			const object: IObject = val as IObject;
-			if((object.geometry.aabb.min.x <= coords.x && object.geometry.aabb.max.x >= coords.x) &&
-				(object.geometry.aabb.min.y <= coords.y && object.geometry.aabb.max.y >= coords.y) &&
-				(object.hasEncounter || object.isGrass || object.isWater)){
+			if (
+				object.geometry.aabb.min.x <= coords.x &&
+				object.geometry.aabb.max.x >= coords.x &&
+				object.geometry.aabb.min.y <= coords.y &&
+				object.geometry.aabb.max.y >= coords.y &&
+				(object.hasEncounter || object.isGrass || object.isWater)
+			) {
 				return object;
 			}
 		}
@@ -70,27 +86,27 @@ export default class Objects{
 		return null;
 	}
 
-	static getNearbyObjects(coords: ICoordinates): Set<unknown>{
+	static getNearbyObjects(coords: ICoordinates): Set<unknown> {
 		return Objects.MAP.getNearby({
 			pos: {
 				x: coords.x,
-				y: coords.y
+				y: coords.y,
 			},
 			aabb: {
 				min: {
 					x: coords.x,
-					y: coords.y
+					y: coords.y,
 				},
 				max: {
 					x: coords.x,
-					y: coords.y
-				}
-			}
+					y: coords.y,
+				},
+			},
 		});
 	}
 }
 
-export interface IObject{
+export interface IObject {
 	geometry: IGeometry;
 	door: ICoordinates | null;
 	msg: string[] | null;
@@ -103,23 +119,23 @@ export interface IObject{
 	isAnimated: boolean;
 }
 
-interface IGeometry{
+interface IGeometry {
 	pos: {
-		x: number,
-		y: number
+		x: number;
+		y: number;
 	};
 	delta?: {
-		x: number,
-		y: number
+		x: number;
+		y: number;
 	};
 	aabb: {
 		min: {
-			x: number,
-			y: number
-		},
+			x: number;
+			y: number;
+		};
 		max: {
-			x: number,
-			y: number
-		}
+			x: number;
+			y: number;
+		};
 	};
 }

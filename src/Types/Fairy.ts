@@ -1,24 +1,24 @@
-import Dark from './Dark';
-import Dragon from './Dragon';
-import Fighting from './Fighting';
-import Fire from './Fire';
-import Poison from './Poison';
-import Steel from './Steel';
-import Type from '../Type';
+import Type from "../Type";
+import Dark from "./Dark";
+import Dragon from "./Dragon";
+import Fighting from "./Fighting";
+import Fire from "./Fire";
+import Poison from "./Poison";
+import Steel from "./Steel";
 
-export default class Fairy extends Type{
-	multiplier(type: Type){
-		if(type instanceof Fire){
+export default class Fairy extends Type {
+	multiplier(type: Type) {
+		if (type instanceof Fire) {
 			return 0.5;
-		}else if(type instanceof Poison){
+		} else if (type instanceof Poison) {
 			return 0.5;
-		}else if(type instanceof Steel){
+		} else if (type instanceof Steel) {
 			return 0.5;
-		}else if(type instanceof Fighting){
+		} else if (type instanceof Fighting) {
 			return 2;
-		}else if(type instanceof Dragon){
+		} else if (type instanceof Dragon) {
 			return 2;
-		}else if(type instanceof Dark){
+		} else if (type instanceof Dark) {
 			return 2;
 		}
 

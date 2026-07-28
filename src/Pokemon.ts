@@ -1,14 +1,14 @@
-import Type from './Type';
-import Move from './Move';
-import { StatusCondition } from './StatusCondition';
+import Move from "./Move";
+import { StatusCondition } from "./StatusCondition";
+import Type from "./Type";
 
-export default class Pokemon{
+export default class Pokemon {
 	private type: Type;
 	private type2: Type;
 	private level: number;
 	private stats: Stats;
 	private status: StatusCondition;
-	constructor(type: Type, type2: Type, level: number, stats: Stats, status: StatusCondition){
+	constructor(type: Type, type2: Type, level: number, stats: Stats, status: StatusCondition) {
 		this.type = type;
 		this.type2 = type2;
 		this.level = level;
@@ -16,62 +16,56 @@ export default class Pokemon{
 		this.status = status;
 	}
 
-	getType(): Type{
+	getType(): Type {
 		return this.type;
 	}
 
-	getType2(): Type{
+	getType2(): Type {
 		return this.type2;
 	}
 
-	getLevel(): number{
+	getLevel(): number {
 		return this.level;
 	}
 
-	isStab(move: Move): boolean{
-		return false;
+	isStab(move: Move): boolean {
+		return move.getType() === this.type || move.getType() === this.type2;
 	}
 
-	isBurned(): boolean{
+	isBurned(): boolean {
 		return this.status === StatusCondition.Burned;
 	}
 
-	getPower(move: Move): number{
-		if(move.isSpecial()){
-			return this.stats.SpecAttack;
-		}
-		return this.stats.Attack;
+	getPower(move: Move): number {
+		return move.isSpecial() ? this.stats.SpecAttack : this.stats.Attack;
 	}
 
-	getDefense(move: Move): number{
-		if(move.isSpecial()){
-			return this.stats.SpecDefense;
-		}
-		return this.stats.Defense;
+	getDefense(move: Move): number {
+		return move.isSpecial() ? this.stats.SpecDefense : this.stats.Defense;
 	}
 
-	takeDamage(dmg: number, crit: boolean, type_multiplier: number){
+	takeDamage(dmg: number, crit: boolean, type_multiplier: number) {
 		this.stats.HP -= dmg;
-		if(this.stats.HP <= 0){
+		if (this.stats.HP <= 0) {
 			this.stats.HP = 0;
 			// TODO: Feinted?
 		}
 
-		if(crit){
+		if (crit) {
 			// TODO: Critical hit msg.
 		}
 
-		if(type_multiplier === 0){
+		if (type_multiplier === 0) {
 			// TODO: No effect msg.
-		}else if(type_multiplier < 1){
+		} else if (type_multiplier < 1) {
 			// TODO: Not very effective msg.
-		}else if(type_multiplier > 1){
+		} else if (type_multiplier > 1) {
 			// TODO: Super effective msg.
 		}
 	}
 }
 
-export interface Stats{
+export interface Stats {
 	HP: number;
 	MaxHP: number;
 	Attack: number;

@@ -1,17 +1,17 @@
-import Type from '../Type';
-import Dark from './Dark';
-import Psychic from './Psychic';
-import Normal from './Normal';
+import Type from "../Type";
+import Dark from "./Dark";
+import Normal from "./Normal";
+import Psychic from "./Psychic";
 
-export default class Ghost extends Type{
-	multiplier(type: Type){
-		if(type instanceof Dark){
+export default class Ghost extends Type {
+	multiplier(type: Type) {
+		if (type instanceof Dark) {
 			return 0.5;
-		}else if(type instanceof Ghost){
+		} else if (type instanceof Ghost) {
 			return 2;
-		}else if(type instanceof Psychic){
+		} else if (type instanceof Psychic) {
 			return 2;
-		}else if(type instanceof Normal){
+		} else if (type instanceof Normal) {
 			return 0;
 		}
 

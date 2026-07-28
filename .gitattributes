@@ -1,0 +1,2 @@
+# Keep Oxfmt's configured source line ending stable across platforms.
+*.ts text eol=lf

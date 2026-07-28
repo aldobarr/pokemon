@@ -1,0 +1,120 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"categories": {
+		"correctness": "off",
+		"suspicious": "off",
+		"pedantic": "off",
+		"perf": "off",
+		"style": "off",
+		"restriction": "off",
+		"nursery": "off"
+	},
+	"plugins": [
+		"eslint",
+		"typescript",
+		"unicorn"
+	],
+	"ignorePatterns": [
+		"dist/**",
+		"node_modules/**"
+	],
+	"overrides": [
+		{
+			"files": [
+				"src/**/*.ts"
+			],
+			"rules": {
+				"arrow-body-style": [
+					"error",
+					"as-needed"
+				],
+				"constructor-super": "error",
+				"curly": [
+					"error",
+					"all"
+				],
+				"eqeqeq": [
+					"error",
+					"always",
+					{
+						"null": "ignore"
+					}
+				],
+				"guard-for-in": "error",
+				"no-bitwise": "error",
+				"no-caller": "error",
+				"no-debugger": "error",
+				"no-eval": "error",
+				"no-fallthrough": "error",
+				"no-labels": [
+					"error",
+					{
+						"allowLoop": true,
+						"allowSwitch": true
+					}
+				],
+				"no-new-wrappers": "error",
+				"no-restricted-imports": [
+					"error",
+					{
+						"paths": [
+							"rxjs",
+							"rxjs/Rx"
+						]
+					}
+				],
+				"no-restricted-properties": [
+					"error",
+					{
+						"object": "console",
+						"property": "debug"
+					},
+					{
+						"object": "console",
+						"property": "info"
+					},
+					{
+						"object": "console",
+						"property": "time"
+					},
+					{
+						"object": "console",
+						"property": "timeEnd"
+					},
+					{
+						"object": "console",
+						"property": "trace"
+					}
+				],
+				"no-throw-literal": "error",
+				"unicorn/no-useless-undefined": [
+					"error",
+					{
+						"checkArguments": false,
+						"checkArrowFunctionBody": false
+					}
+				],
+				"no-var": "error",
+				"prefer-const": "error",
+				"radix": "error",
+				"typescript/consistent-type-definitions": [
+					"error",
+					"interface"
+				],
+				"typescript/no-empty-object-type": [
+					"error",
+					{
+						"allowInterfaces": "never",
+						"allowObjectTypes": "always"
+					}
+				],
+				"typescript/no-misused-new": "error",
+				"typescript/no-non-null-assertion": "error",
+				"no-shadow": "error",
+				"no-unused-expressions": "error",
+				"typescript/prefer-function-type": "error",
+				"typescript/unified-signatures": "error"
+			}
+		}
+	]
+}

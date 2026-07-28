@@ -1,6 +1,6 @@
-import { Player } from './Player';
+import { Player } from "./Player";
 
-export default class Keypress{
+export default class Keypress {
 	private value: string;
 	private isDown: boolean = false;
 	private isUp: boolean = true;
@@ -12,14 +12,14 @@ export default class Keypress{
 	private upListener: any;
 	private player: Player;
 
-	constructor(value: string, player: Player){
+	constructor(value: string, player: Player) {
 		this.value = value;
 		this.player = player;
 
 		const key: Keypress = this;
 		this.downHandler = (event: KeyboardEvent) => {
-			if(event.key === key.value){
-				if(key.isUp && key.press){
+			if (event.key === key.value) {
+				if (key.isUp && key.press) {
 					key.press(key.player);
 				}
 
@@ -30,8 +30,8 @@ export default class Keypress{
 		};
 
 		this.upHandler = (event: KeyboardEvent) => {
-			if(event.key === key.value){
-				if(key.isDown && key.release){
+			if (event.key === key.value) {
+				if (key.isDown && key.release) {
 					key.release(key.player);
 				}
 
@@ -46,17 +46,17 @@ export default class Keypress{
 		this.setupListeners();
 	}
 
-	private setupListeners(){
-		window.addEventListener('keydown', this.downListener, false);
-		window.addEventListener('keyup', this.upListener, false);
+	private setupListeners() {
+		window.addEventListener("keydown", this.downListener, false);
+		window.addEventListener("keyup", this.upListener, false);
 	}
 
-	unsubscribe(){
-		window.removeEventListener('keydown', this.downListener);
-		window.removeEventListener('keyup', this.upListener);
+	unsubscribe() {
+		window.removeEventListener("keydown", this.downListener);
+		window.removeEventListener("keyup", this.upListener);
 	}
 
-	isDownPressed(){
+	isDownPressed() {
 		return this.isDown === true;
 	}
 }

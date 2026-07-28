@@ -1,0 +1,16 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"endOfLine": "lf",
+	"ignorePatterns": [
+		"dist/**",
+		"node_modules/**"
+	],
+	"printWidth": 160,
+	"semi": true,
+	"sortImports": {
+		"sortSideEffects": false
+	},
+	"sortPackageJson": false,
+	"tabWidth": 4,
+	"useTabs": true
+}
