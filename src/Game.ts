@@ -26,7 +26,7 @@ export default class Game {
 	private constructor() {
 		this.app = new PIXI.Application({ width: 800, height: 600 });
 		this.loader = new PIXI.Loader();
-		this.player = new Player("Aldo", 66, 268);
+		this.player = new Player("Player", 66, 268);
 		this.overWorld = new PIXI.Container();
 		this.overWorldSprite = new PIXI.Sprite();
 		document.body.appendChild(this.app.view);
